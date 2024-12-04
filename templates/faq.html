@@ -1,0 +1,69 @@
+{% include 'header.html' %}
+<div class="container my-5">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb p-3 rounded-3" style="background-color: #2f6868; color: white; border-radius: 0.375rem;">
+      <li class="breadcrumb-item">
+        <a class="link-body-emphasis home-icon" href="{{ url_for('home') }}" style="color: #f8f9fa;">
+          <i class="bi bi-house-door-fill" style="color: #f8f9fa;"></i>
+          <span class="visually-hidden">Home</span>
+        </a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page" style="color: #f8f9fa;">FAQ</li>
+    </ol>
+  </nav>
+</div>
+
+<section class="faq-section py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-7 order-2 order-lg-1">
+        <div class="faq-container px-xl-5" data-aos="fade-up" data-aos-delay="200">
+          <!-- FAQ Item 1 -->
+          <div class="faq-item">
+            <a class="faq-toggle" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="false">
+              <h3>What types of products do you offer?</h3>
+              <i class="bi bi-chevron-down"></i>
+            </a>
+            <div id="faq1" class="collapse">
+              <div class="faq-content">
+                <p>A wide range of electronics, including smartphones, laptops, tablets, smart home devices, and accessories from top brands.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 2 -->
+          <div class="faq-item">
+            <a class="faq-toggle" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false">
+              <h3>Do you offer international shipping?</h3>
+              <i class="bi bi-chevron-down"></i>
+            </a>
+            <div id="faq2" class="collapse">
+              <div class="faq-content">
+                <p>Yes, we ship to select international locations. Shipping costs and times vary by destination. Check our shipping policy for details.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 3 -->
+          <div class="faq-item">
+            <a class="faq-toggle" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false">
+              <h3>How can I contact customer support?</h3>
+              <i class="bi bi-chevron-down"></i>
+            </a>
+            <div id="faq3" class="collapse">
+              <div class="faq-content">
+                <p>Reach our customer support team via the contact form, email at <strong>support@gizmo.com</strong>, or call our toll-free number during business hours.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-5 order-1 order-lg-2 img-class">
+        <img src="{{ url_for('static', filename='img/question.svg') }}" class="img-fluid" alt="Frequently Asked Questions" data-aos="zoom-in" data-aos-delay="100">
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include 'footer.html' %}

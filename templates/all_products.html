@@ -1,0 +1,95 @@
+{% include 'header.html' %}
+<div class="container my-5">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb p-3 rounded-3" style="background-color: #2f6868; color: white; border-radius: 0.375rem;">
+      <li class="breadcrumb-item">
+        <a class="link-body-emphasis home-icon" href="{{ url_for('home') }}" style="color: #f8f9fa;">
+          <i class="bi bi-house-door-fill" style="color: #f8f9fa;"></i>
+          <span class="visually-hidden">Home</span>
+        </a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page" style="color: #f8f9fa;">All Products</li>
+    </ol>
+  </nav>
+</div>
+
+<!-- Products section -->
+<section id="all_products" class="py-5 custom-product-section" style="background-color:#2f6868;">
+    <div class="container px-4 px-lg-5 mt-5">
+        <!-- Featured Items Label -->
+        <h2 class="section-title" style="color:white;">Featured Items</h2>
+
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            {% for product in products %}
+                <div class="col mb-5" data-aos="fade-up">
+                    <div class="card h-100 custom-card">
+                        <!-- Display sale badge if discount is available -->
+                        {% if product.discountPercentage and product.discountPercentage > 0 %}
+                        <div class="badge bg-danger text-white position-absolute custom-sale-badge" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                        {% endif %}
+
+                        <!-- Product Image -->
+                        <a href="{{ url_for('product_details', product_id=product.id) }}">
+                            <img class="card-img-top custom-card-img"
+                                 src="{{ product.thumbnail if product.thumbnail else (product.images[0] if product.images else url_for('static', filename='default_image_url')) }}"
+                                 alt="{{ product.name }}" />
+                        </a>
+
+                        <!-- Product Details -->
+                        <div class="card-body d-flex flex-column custom-card-body">
+                            <div class="text-center flex-grow-1">
+                                <!-- Product Title -->
+                                <h5 class="fw-bolder custom-product-title">{{ product.name }}</h5>
+
+                                <!-- Product Category -->
+                                <p class="text-muted small custom-product-category">{{ product.category.name if product.category else 'N/A' }}</p>
+
+                                <!-- Rating and Stock Status -->
+                                <p class="small mb-1 custom-rating-stock">
+                                    Rating: ⭐{{ product.rating if product.rating else 'N/A' }} |
+                                    <span class="text-muted custom-availability-status">{{ 'In Stock' if product.stock > 0 else 'Out of Stock' }}</span>
+                                </p>
+
+                                <!-- Product Price with Discount -->
+                                {% if product.discountPercentage and product.discountPercentage > 0 %}
+                                <span class="text-muted text-decoration-line-through custom-original-price">${{ product.price }}</span>
+                                <span class="text-success custom-sale-price">
+                                    ${{ (product.price * (1 - product.discountPercentage / 100)) | round(2) }}
+                                </span>
+                                {% else %}
+                                <span class="custom-price">${{ product.price }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Footer with View Options Button -->
+                        <form method="post" action="{{ url_for('add_to_cart', product_id=product.id) }}">
+                            <div class="product-buttons-container d-flex justify-content-between align-items-center">
+                                <!-- Add to Cart Button -->
+                                {% if logged_in %}
+                                    <input type="number" id="quantity_{{ product.id }}" name="quantity" class="custom-view" value="1" min="1"
+                                           style="width: 40px; height: 30px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px;">
+                                    <button type="submit" class="btn custom-add-to-cart-button">
+                                        <i class="bi bi-cart-fill me-2"></i> +Add
+                                    </button>
+
+                                    <!-- Like Product Button (Heart Icon) -->
+                                    <a class="btn custom-like-button" href="">
+                                        <i class="bi bi-heart-fill me-2"></i> +
+                                    </a>
+                                {% else %}
+                                    <!-- Like Product Button (Lock Icon when not logged in) -->
+                                    <a class="btn custom-like-button" href="{{ url_for('login') }}">
+                                        <i class="bi bi-lock-fill me-2"></i> Login to Buy
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% include 'footer.html' %}

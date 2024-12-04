@@ -1,0 +1,84 @@
+{% include 'header.html' %}
+
+<div class="register-container">
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+        <div class="col-xl-10 col-lg-12 col-md-9">
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body p-0">
+                    <!-- Nested Row within Card Body -->
+                    <div class="row">
+                        {% with messages = get_flashed_messages(with_categories=True) %}
+                            {% if messages %}
+                                <div class="container my-3">
+                                    {% for category, message in messages %}
+                                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                            <strong>{% if category == 'success' %}Success!{% elif category == 'danger' %}Error!{% else %}Notice!{% endif %}</strong> {{ message }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+
+                        <div class="col-lg-6 d-none d-lg-block" style="background-image: url('{{ url_for('static', filename='img/login.svg') }}'); background-size: contain; background-position: center; background-repeat: no-repeat; height: 100vh; width: 40%; padding-left: 20px;"></div>
+
+                        <div class="col-lg-7">
+                            <div class="p-5 lo-container">
+                                <div class="text-center">
+                                    <h1 class="h4 text-gray-900 mb-4">Welcome!</h1>
+                                </div>
+                                <form class="user" method="POST" action="{{ url_for('login') }}">
+                                    {{ form.hidden_tag() }}
+                                    <div class="login-form-group">
+                                        {{ form.email.label(class="login-form-label") }}
+                                        {{ form.email(class="login-form-control form-control-user", placeholder="Email") }}
+                                        {% if form.email.errors %}
+                                            <div class="text-danger">
+                                                {% for error in form.email.errors %}
+                                                    <p>{{ error }}</p>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="login-form-group">
+                                        {{ form.password.label(class="login-form-label") }}
+                                        {{ form.password(class="login-form-control form-control-user", placeholder="Password") }}
+                                        {% if form.password.errors %}
+                                            <div class="text-danger">
+                                                {% for error in form.password.errors %}
+                                                    <p>{{ error }}</p>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <button type="submit" class="login-btn btn-primary btn-user btn-block">
+                                        Login
+                                    </button>
+                                    <hr>
+                                    <a href="{{ url_for('google_login') }}" class="btn-google btn-block">
+                                        <i class="fab fa-google fa-fw"></i> Login with Google
+                                    </a>
+                                </form>
+                                <hr>
+                                <div class="text-center" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+                                    <div style="display: flex; justify-content: center; align-items: center;">
+                                        <a class="small" href="{{url_for('register')}}" style="margin-right: 1rem;">Create an Account!</a>
+                                        <a class="small" href="{{url_for('forgot_password')}}">Forgot Password?</a>
+                                    </div>
+                                    <a class="small" href="{{ url_for('home') }}" style="margin-top: 1rem;">Go Back</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+

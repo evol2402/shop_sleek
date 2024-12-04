@@ -1,0 +1,174 @@
+{% include 'header.html' %}
+
+<div class="register-container">
+
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+
+        <div class="col-xl-10 col-lg-12 col-md-9">
+
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body p-0">
+                    <!-- Nested Row within Card Body -->
+                    <div class="row">
+                        {% with messages = get_flashed_messages(with_categories=True) %}
+                            {% if messages %}
+                                <div class="container my-3">
+                                    {% for category, message in messages %}
+                                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                            <strong>{% if category == 'success' %}Success!{% elif category == 'danger' %}Error!{% else %}Notice!{% endif %}</strong> {{ message }}
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-xl-10 col-lg-12 col-md-9">
+                                    <div class="card o-hidden border-0 shadow-lg my-5">
+                                        <div class="card-body p-0">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="p-5">
+                                                        <div class="text-center">
+                                                            <h1 class="h4 text-gray-900 mb-4">Edit Product</h1>
+                                                        </div>
+
+                                                        <!-- Display form for editing product -->
+                                                   <form method="POST" action="{{ url_for('edit_product', product_id=product.id) }}">
+    {{ form.hidden_tag() }}
+
+    <div class="custom-form-group" style="margin-bottom: 20px;">
+        {{ form.name.label(class="custom-form-label") }}
+        {{ form.name(class="custom-form-control", placeholder="Enter product name...", value=product.name, style="width: 100%; padding: 10px;") }}
+        {% if form.name.errors %}
+            <div class="text-danger custom-error-message">
+                {% for error in form.name.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="custom-form-group" style="margin-bottom: 20px;">
+        {{ form.description.label(class="custom-form-label") }}
+        {{ form.description(class="custom-form-control", placeholder="Enter product description...", value=product.description, style="width: 100%; padding: 10px;") }}
+        {% if form.description.errors %}
+            <div class="text-danger custom-error-message">
+                {% for error in form.description.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+                                                       <div class="custom-form-group" style="margin-bottom: 20px;">
+    {{ form.featured.label(class="custom-form-label") }}
+    {{ form.featured(class="custom-form-control", style="width: 100%; padding: 15px;") }}
+</div>
+
+
+    <div class="custom-form-group" style="margin-bottom: 20px;">
+        {{ form.price.label(class="custom-form-label") }}
+        {{ form.price(class="custom-form-control", placeholder="Enter product price...", value=product.price, style="width: 100%; padding: 10px;") }}
+        {% if form.price.errors %}
+            <div class="text-danger custom-error-message">
+                {% for error in form.price.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="custom-form-group" style="margin-bottom: 20px;">
+        {{ form.stock.label(class="custom-form-label") }}
+        {{ form.stock(class="custom-form-control", placeholder="Enter stock quantity...", value=product.stock, style="width: 100%; padding: 10px;") }}
+        {% if form.stock.errors %}
+            <div class="text-danger custom-error-message">
+                {% for error in form.stock.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+                                                          <div class="custom-form-group" style="margin-bottom: 20px;">
+        {{ form.sales.label(class="custom-form-label") }}
+        {{ form.sales(class="custom-form-control", placeholder="Enter sales quantity...", value=product.sales_count, style="width: 100%; padding: 10px;") }}
+        {% if form.stock.errors %}
+            <div class="text-danger custom-error-message">
+                {% for error in form.stock.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="custom-form-group" style="margin-bottom: 20px;">
+        {{ form.category.label(class="custom-form-label") }}
+        {{ form.category(class="custom-form-control", style="width: 100%; padding: 10px;") }}
+        {% if form.category.errors %}
+            <div class="text-danger custom-error-message">
+                {% for error in form.category.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="custom-form-group" style="margin-bottom: 20px;">
+        {{ form.discountPercentage.label(class="custom-form-label") }}
+        {{ form.discountPercentage(class="custom-form-control", placeholder="Enter discount percentage...", value=product.discountPercentage, style="width: 100%; padding: 10px;") }}
+        {% if form.discountPercentage.errors %}
+            <div class="text-danger custom-error-message">
+                {% for error in form.discountPercentage.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="custom-form-group" style="margin-bottom: 20px;">
+        {{ form.thumbnail.label(class="custom-form-label") }}
+        {{ form.thumbnail(class="custom-form-control", placeholder="Enter product thumbnail URL...", value=product.thumbnail, style="width: 100%; padding: 10px;") }}
+        {% if form.thumbnail.errors %}
+            <div class="text-danger custom-error-message">
+                {% for error in form.thumbnail.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-user btn-block custom-submit-button" style="padding: 10px; font-size: 16px;">
+        Save Changes
+    </button>
+</form>
+
+                                                        <hr>
+                                                        <div class="text-center">
+                                                            <a href="{{ url_for('admin_dashboard') }}">Back to Dashboard</a>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% include 'footer.html' %}

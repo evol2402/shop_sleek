@@ -1,0 +1,75 @@
+{% include 'header.html' %}
+
+<div class="register-container">
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+        <div class="col-xl-10 col-lg-12 col-md-9">
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body p-0">
+                    <!-- Nested Row within Card Body -->
+                    <div class="row">
+                        {% with messages = get_flashed_messages(with_categories=True) %}
+                            {% if messages %}
+                                <div class="container my-3">
+                                    {% for category, message in messages %}
+                                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                            <strong>{% if category == 'success' %}Success!{% elif category == 'danger' %}Error!{% else %}Notice!{% endif %}</strong> {{ message }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+
+                        <div class="col-lg-6 d-none d-lg-block" style="background-image: url('{{product.thumbnail}}'); background-size: contain; background-position: center; background-repeat: no-repeat; height: 100vh; width: 40%; padding-left: 20px;"></div>
+
+                      <div class="col-lg-7">
+    <div class="p-5 lo-container">
+        <div class="text-center">
+            <h1 class="h4 text-gray-900 mb-4">Your Review Matters!</h1>
+        </div>
+        <form action="{{ url_for('add_review', product_id=product.id) }}" method="post">
+            <div class="mb-3">
+                <label for="rating" class="form-label">Rating</label>
+                <select class="form-select" id="rating" name="rating" required>
+                    <option value="" disabled selected>Select a rating</option>
+                    <option value="1">⭐ 1</option>
+                    <option value="2">⭐ 2</option>
+                    <option value="3">⭐ 3</option>
+                    <option value="4">⭐ 4</option>
+                    <option value="5">⭐ 5</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="review_text" class="form-label">Review</label>
+                <textarea class="comment-form" id="review_text" name="review_text" rows="3" placeholder="Write your review here"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="comment" class="custom-form-label" style="margin-bottom:0px;">Comment (Optional)</label>
+                <input type="text" class="comment-form" id="comment" name="comment" placeholder="Add a brief comment">
+            </div>
+            <div style="display:flex; justify-content:center;">
+                <button type="submit" class="btn btn-success">Submit Review</button>
+            </div>
+        </form>
+        <hr>
+        <div class="text-center" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <a class="small" href="{{ url_for('view_cart') }}" style="margin-right: 1rem;">Go Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+

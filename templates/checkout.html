@@ -1,0 +1,90 @@
+{% include 'header.html' %}
+
+<div class="register-container">
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+        <div class="col-xl-10 col-lg-12 col-md-9">
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body p-0">
+                    <!-- Nested Row within Card Body -->
+                    <div class="row">
+                        {% with messages = get_flashed_messages(with_categories=True) %}
+                            {% if messages %}
+                                <div class="container my-3">
+                                    {% for category, message in messages %}
+                                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                            <strong>{% if category == 'success' %}Success!{% elif category == 'danger' %}Error!{% else %}Notice!{% endif %}</strong> {{ message }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+
+
+                           <div class="p-5 lo-container">
+    <div class="text-center">
+        <h1 class="h4 text-gray-900 mb-4">Confirm Your Order</h1>
+        <p>Please review your order details before proceeding to payment.</p>
+    </div>
+
+    <!-- Cart details (multiple products, their images, quantity, price, and total) -->
+    <div class="row">
+        <div class="col-12 col-md-6">
+            {% for cart_item in cart.cart_items %}
+                <div class="d-flex mb-4">
+                    <!-- Product Image -->
+                    <div class="col-4">
+                      <div class="product-image" style="background-image: url('{{ cart_item.product.thumbnail if cart_item.product.thumbnail else (cart_item.product.images[0] if cart_item.product.images else url_for('static', filename='default_image_url')) }}'); background-size: contain; background-position: center; background-repeat: no-repeat; height: 150px; width: 100%;"></div>
+
+                    </div>
+
+                    <!-- Product Details -->
+                    <div class="col-8">
+                        <h5>{{ cart_item.product.name }}</h5>
+                        <p><strong>Price:</strong> ${{ cart_item.product.price }}</p>
+                        <p><strong>Quantity:</strong> {{ cart_item.quantity }}</p>
+                        <p><strong>Total:</strong> ${{ cart_item.product.price * cart_item.quantity }}</p>
+                    </div>
+                </div>
+                <hr>
+            {% endfor %}
+        </div>
+
+        <!-- Total amount section on the right (adjust for small screens) -->
+        <div class="col-12 col-md-6">
+            <div class="text-end mb-4" style="display:flex; justify-content:center; align-items:center;">
+                <h4><strong>Total Amount: ${{ total_amount }}</strong></h4>
+            </div>
+
+            <!-- Confirmation Section -->
+            <div class="text-center" style="margin-top: 2rem;">
+                <h5><strong>Are you sure you want to proceed with this order?</strong></h5>
+                <p>Once you confirm, you will be redirected to the payment page.</p>
+
+
+                <form action="{{url_for('create_checkout_session')}}" method="POST">
+  <input type="hidden" name="amount" value="{{ total_amount }}">
+  <button class="btn btn-success" type="submit">Process Payment</button>
+                    </form>
+
+
+                <!-- Button to go back and edit the cart -->
+                <div style="margin-top: 1rem;">
+                    <a class="btn btn-secondary" href="{{ url_for('view_cart') }}">Edit Cart</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

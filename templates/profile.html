@@ -1,0 +1,119 @@
+{% include 'header.html' %}
+
+<div class="register-container">
+
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+
+        <div class="col-xl-10 col-lg-12 col-md-9">
+
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body p-0">
+                    <!-- Nested Row within Card Body -->
+                    <div class="row">
+                         {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            <div class="container my-3">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        <strong>{% if category == 'success' %}Success!{% elif category == 'danger' %}Error!{% else %}Notice!{% endif %}</strong> {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+                        <!-- Background image section based on user gender -->
+                        <div class="col-lg-6 d-none d-lg-block"
+                             style="background-image: url('{% if user.gender == 'Male' %}{{ url_for('static', filename='img/male.svg') }}{% elif user.gender == 'Female' %}{{ url_for('static', filename='img/female.svg') }}{% elif user.gender == 'Other' %}{{ url_for('static', filename='img/other.svg') }}{% else %}{{ url_for('static', filename='img/default.svg') }}{% endif %}');
+                             background-size: contain;
+                             background-position: center;
+                             background-repeat: no-repeat;
+                             height: 50vh;
+                             width: 40%;
+                             margin-top:1rem;
+                             padding-left: 20px;
+                             display: flex;
+                             justify-content: center;
+                             align-items: center;">
+                        </div>
+
+                        <div class="col-lg-12"> <!-- Adjusted column size to be consistent with the other column -->
+                            <div class="p-5 lo-container">
+                                <div class="text-center">
+                                    <h1 class="h4 text-gray-900 mb-4">Profile Information</h1>
+                                </div>
+                             <div id="user-info" style="display: flex; align-items: center; gap: 10px; width: 100%;">
+    <p style="margin: 0; flex-grow: 1;"><strong>First Name:</strong> {{ user.first_name }}</p>
+    <p style="margin: 0; flex-grow: 1;"><strong>Last Name:</strong> {{ user.last_name }}</p>
+    <p style="margin: 0; flex-grow: 1;"><strong>Gender:</strong> {{ user.gender }}</p>
+    <button id="edit-button" class="btn btn-warning" onclick="toggleEdit()">Edit Profile</button>
+</div>
+
+
+
+                                <hr>
+                                <div class="text-center">
+                                    <a class="small" href="{{ url_for('home') }}">Go Back to Home</a>
+                                </div>
+
+                         <form class="user" method="POST" action="{{ url_for('profile') }}" id="profile-form" style="display:none; padding: 20px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); background-color: #f8f9fa;">
+    {{ form.hidden_tag() }}
+    <div class="form-group" style="margin-bottom: 15px;">
+        {{ form.first_name.label(class="form-label") }}
+        {{ form.first_name(class="form-control form-control-user", placeholder="Enter First Name", style="margin-top: 5px;") }}
+    </div>
+    <div class="form-group" style="margin-bottom: 15px;">
+        {{ form.last_name.label(class="form-label") }}
+        {{ form.last_name(class="form-control form-control-user", placeholder="Enter Last Name", style="margin-top: 5px;") }}
+    </div>
+    <div class="form-group" style="margin-bottom: 15px;">
+        {{ form.gender.label(class="form-label") }}
+        <div class="form-check" style="margin-top: 5px;">
+            {% for choice in form.gender.iter_choices() %}
+                <div class="form-check" style="margin-bottom: 10px;">
+                    <input type="radio" name="gender" id="{{ choice[0] }}" value="{{ choice[0] }}"
+                           class="form-check-input" {% if choice[0] == user.gender %} checked {% endif %}>
+                    <label for="{{ choice[0] }}" class="form-check-label">{{ choice[1] }}</label>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary btn-user btn-block" style="margin-top: 20px;">
+        Update Profile
+    </button>
+</form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+ <script>
+        function toggleEdit() {
+            var userInfo = document.getElementById('user-info');
+            var profileForm = document.getElementById('profile-form');
+            var editButton = document.getElementById('edit-button');
+
+            if (userInfo.style.display === "none") {
+                userInfo.style.display = "block";
+                profileForm.style.display = "none";
+                editButton.innerHTML = "Edit Profile";
+            } else {
+                userInfo.style.display = "none";
+                profileForm.style.display = "block";
+                editButton.innerHTML = "Cancel";
+            }
+        }
+    </script>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

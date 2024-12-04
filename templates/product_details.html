@@ -1,0 +1,169 @@
+{% include 'header.html' %}
+
+<div class="container my-5">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb p-3 rounded-3" style="background-color: #2f6868; color: white; border-radius: 0.375rem;">
+      <li class="breadcrumb-item">
+        <a class="link-body-emphasis home-icon" href="{{ url_for('home') }}" style="color: #f8f9fa;">
+          <i class="bi bi-house-door-fill" style="color: #f8f9fa;"></i>
+          <span class="visually-hidden">Home</span>
+        </a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page" style="color: #f8f9fa;">{{product.name}} Details</li>
+    </ol>
+  </nav>
+</div>
+
+
+<!-- Product Details Section -->
+<section id="product_details" class="py-5">
+  <div class="container px-4 px-lg-5 mt-5">
+    <div class="row gx-4 gx-lg-5">
+ <div class="col-md-6 d-flex justify-content-center align-items-center">
+  <!-- Product Image -->
+  <img class="img-fluid rounded-3 shadow-lg"
+       style="max-width: 100%; height: auto; object-fit: cover;"
+       src="{{ product.thumbnail if product.thumbnail else (product.images[0] if product.images else url_for('static', filename='default_image_url')) }}"
+       alt="{{ product.name }}">
+</div>
+
+     <div class="col-md-6" style="padding:2rem;">
+  <!-- Product Details -->
+  <h2 class="fw-bolder custom-product-title" style="font-size: 2rem; color: #2f6868;">{{ product.name }}</h2>
+
+  <!-- Product Category -->
+  <p class="text-muted small custom-product-category" style="font-size: 1rem; color: #6c757d;">
+    {{ product.category.name if product.category else 'N/A' }}
+  </p>
+
+  <!-- Product Price with Discount -->
+  {% if product.discountPercentage and product.discountPercentage > 0 %}
+    <span class="text-muted text-decoration-line-through custom-original-price" style="font-size: 1.25rem; color: #6c757d;">
+      ${{ product.price }}
+    </span>
+    <span class="text-success custom-sale-price" style="font-size: 1.5rem; font-weight: bold;">
+      ${{ (product.price * (1 - product.discountPercentage / 100)) | round(2) }}
+    </span>
+  {% else %}
+    <span class="custom-price" style="font-size: 1.5rem; font-weight: bold; color: #2f6868;">
+      ${{ product.price }}
+    </span>
+  {% endif %}
+
+  <!-- Product Rating -->
+  <p class="small mb-1 custom-rating-stock" style="color: #6c757d; font-size: 1rem;">
+    Rating: ⭐{{ product.rating if product.rating else 'N/A' }}
+  </p>
+
+  <!-- Product Availability -->
+<p class="text-muted custom-availability-status"
+   style="font-size: 1rem; color: {{ 'green' if product.stock > 0 else 'red' }}">
+    {% if product.stock > 0 %}
+        In Stock ({{ product.stock }} available)
+    {% else %}
+        Out of Stock
+    {% endif %}
+</p>
+
+
+  <!-- Product Description -->
+  <div class="product-description mt-4">
+    <h5 style="font-size: 1.25rem; color: #2f6868;">Description</h5>
+    <p style="font-size: 1rem; color: #495057;">{{ product.description if product.description else 'No description available.' }}</p>
+  </div>
+
+
+ <form method="post" action="{{ url_for('add_to_cart', product_id=product.id) }}">
+  <!-- Buttons for View Reviews and Add to Cart -->
+  <div class="d-flex mt-4">
+    <!-- View All Reviews Button -->
+
+
+    <!-- Add to Cart Button -->
+
+    {%if logged_in: %}
+         <input type="number" id="quantity_{{ product.id }}" name="quantity" class="custom-view" value="1" min="1"
+                                           style="padding:0 ;width: 10vw; height: auto; font-size: 20px; margin-right:10px; border: 1px solid #ccc; border-radius: 4px;">
+    <button class="btn btn-primary" type="submit" style="font-size: 1.25rem; padding: 0.75rem 1.5rem; background-color: #2f6868; border-radius: 0.375rem;">
+      Add to Cart
+    </button>
+    {%else%}
+    <a class="btn btn-primary" href="{{ url_for('login') }}" style="font-size: 1.25rem; padding: 0.75rem 1.5rem; background-color: #2f6868; border-radius: 0.375rem;">
+     <i class="bi bi-lock-fill me-2"></i> Login to Buy
+    </a>
+    {%endif%}
+  </div>
+       </form>
+</div>
+  <!-- Review Section -->
+  <div class="product-reviews mt-4 d-flex align-items-center justify-content-between">
+    <h5 style="font-size: 1.25rem; color: #2f6868;">Reviews</h5>
+
+    <!-- Button to add a review -->
+      {%if logged_in:%}
+    <a href="{{ url_for('add_review', product_id=product.id) }}" class="btn btn-primary btn-sm">
+        Add a Comment
+    </a>
+      {%else%}
+      <a href="{{ url_for('login') }}" class="btn btn-primary btn-sm">
+    <i class="bi bi-lock-fill me-1"></i> Add a Comment
+</a>
+
+      {%endif%}
+</div>
+<div class="reviews-list mt-3">
+
+    {% if reviews %}
+        {% for review in reviews %}
+            <div class="review mb-3 p-3 d-flex" style="background-color: #f1f3f4; border-radius: 0.5rem; border: 1px solid #e2e6ea;">
+                <!-- User Profile Picture -->
+               <div class="me-3">
+    <img src="{% if review.user.gender == 'Male' %}
+                  {{ url_for('static', filename='img/male.svg') }}
+              {% elif review.user.gender == 'Female' %}
+                  {{ url_for('static', filename='img/female.svg') }}
+              {% elif review.user.gender == 'Other' %}
+                  {{ url_for('static', filename='img/other.svg') }}
+              {% else %}
+                  {{ url_for('static', filename='img/default.svg') }}
+              {% endif %}"
+         alt="{{ review.user.first_name }} {{ review.user.last_name }}"
+         style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
+</div>
+
+
+                <!-- Review Content -->
+                <div>
+                    <p class="mb-1"><strong>{{ review.user.last_name }}</strong>
+                        <span class="text-muted"> - {{ review.date.strftime('%Y-%m-%d') }}</span>
+                    </p>
+
+                    <p class="mb-1" style="font-size: 1.1rem; color: #ffc107;">
+                        Rating:
+                        {% for i in range(review.rating) %}
+                            ⭐
+                        {% endfor %}
+                    </p>
+
+                    {% if review.review_text %}
+                        <p class="mb-1" style="color: #343a40;">{{ review.review_text }}</p>
+                    {% endif %}
+
+                    {% if review.comment %}
+                        <p class="mb-0" style="font-style: italic; color: #6c757d;">{{ review.comment }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">No reviews yet. Be the first to add your thoughts about this product!</p>
+    {% endif %}
+</div>
+
+
+
+    </div>
+  </div>
+</section>
+
+{% include 'footer.html' %}

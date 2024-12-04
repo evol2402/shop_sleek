@@ -1,0 +1,463 @@
+{%include 'header.html'%}
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light custom-navbar fixed-top">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="{{ url_for('home') }}"><i class="bi-cart me-1"></i>
+</i>ShopSleek</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Left-aligned Links -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#home">Home</a></li>
+
+    <!-- Shop Dropdown -->
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="{{url_for('all_products')}}">All Products</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            {% for category in categories %}
+       <li><a class="dropdown-item" href="{{ url_for('view_category_items', category_id=category.id) }}">{{ category.name }}</a></li>
+     {% endfor %}
+        </ul>
+    </li>
+
+    <!-- Additional Links Dropdown -->
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarAdditionalLinks" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">More</a>
+        <ul class="dropdown-menu" aria-labelledby="navbarAdditionalLinks">
+            <li><a class="dropdown-item" href="#about">About</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('faq') }}">Faq</a></li>
+            <li><a class="dropdown-item" href="#contact">Contact Us</a></li>
+        </ul>
+    </li>
+</ul>
+
+
+            <!-- Right-aligned Buttons -->
+            <div class="d-flex ms-auto">
+                {% if not logged_in %}
+                    <a class="btn btn-outline-primary me-2 custom-login-btn" href="{{ url_for('login') }}">Login</a>
+                    <a class="btn btn-primary me-2 custom-signup-btn" href="{{ url_for('register') }}">Sign Up</a>
+                {% else %}
+                <div class="dropdown me-4 kart">
+               <a href="{{ url_for('view_cart') }}" class="btn btn-outline-dark" type="button">
+    <i class="bi-cart-fill me-1"></i>
+    Cart
+    <span class="badge bg-dark text-white ms-1 rounded-pill">{{ total_quantity }}</span>
+</a>
+
+                    <div>
+
+            </div>
+        </div>
+                 <div class="nav-item dropdown kart">
+                <a class="btn btn-outline-dark dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi-person-circle me-1"></i> {{first_name}}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <li><a class="dropdown-item" href="{{url_for('profile')}}">Profile</a></li>
+                    <li><a class="dropdown-item" href="{{url_for('forgot_password')}}">Reset Password</a></li>
+                    {%if is_admin:%}
+                    <li><a class="dropdown-item" href="{{url_for('admin_dashboard')}}">Admin</a></li>
+                    {%endif%}
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{{url_for('logout')}}">Log out</a></li>
+                </ul>
+            </div>
+
+                   {% endif %}
+    </div>
+</nav>
+
+
+
+
+
+
+<br><br>
+<!--carousel sectiom-->
+<section id="home"  class="carousel-section">
+    <div id="myCarousel" class="carousel slide mb-6 carousel-dark-bg" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+
+           <div class="carousel-item active">
+    <img class="d-block w-100 carousel-img" src="{{ url_for('static', filename='img/amazing.svg') }}" alt="Slide 1">
+    <div class="carousel-caption text-end">
+        <h1>Discover Amazing Deals!</h1>
+        <p>Shop the latest trends and exclusive offers at unbeatable prices.</p>
+        <p><a class="btn btn-lg  chahat-btn" href="#">Shop Now</a></p>
+    </div>
+</div>
+
+<div class="carousel-item">
+    <img class="d-block w-100 carousel-img" src="{{ url_for('static', filename='img/cart.svg') }}" alt="Slide 2">
+    <div class="carousel-caption text-end">
+        <h1>Your Favorite Items, Just a Click Away!</h1>
+        <p>Browse our wide selection of products and find what you love.</p>
+        <p><a class="btn btn-lg chahat-btn" href="#">Explore Products</a></p>
+    </div>
+</div>
+{%if not logged_in:%}
+<div class="carousel-item">
+    <img class="d-block w-100 carousel-img" src="{{ url_for('static', filename='img/community.svg') }}" alt="Slide 3">
+    <div class="carousel-caption text-end">
+        <h1>Join Our Community!</h1>
+        <p>Sign up for exclusive access to member-only discounts and promotions.</p>
+        <p><a class="btn btn-lg chahat-btn" href="{{url_for('register')}}">Sign Up Today</a></p>
+    </div>
+</div>
+{%endif%}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</section>
+
+
+
+
+<!-- Category section -->
+
+
+<div class="ani-container">
+     <div class="ani-category-heading">
+        <h2>Product Categories</h2>
+    </div>
+  <div class="ani-gallery">
+      {% for category in categories %}
+       <a class="img-box" style="background-image: url('{{category.thumbnail}}');" href="{{ url_for('view_category_items', category_id=category.id) }}">
+       <h3>{{category.name}}</h3>
+       </a>
+     {% endfor %}
+
+</div>
+
+    </div>
+
+
+
+
+
+<!--    featured items-->
+<section id="all_products" class="py-5 custom-product-section" style="background-color:#2f6868;">
+    <div class="container px-4 px-lg-5 mt-5">
+        <!-- Featured Items Label -->
+        <h2 class="section-title" style="color:white;">Featured Items</h2>
+
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            {% for product in products %}
+                {%if product.featured:%}
+            <div class="col mb-5" data-aos="fade-up"> <!-- AOS fade effect -->
+                <div class="card h-100 custom-card">
+                    <!-- Display sale badge if discount is available -->
+                    {% if product.discountPercentage and product.discountPercentage > 0 %}
+                    <div class="badge bg-danger text-white position-absolute custom-sale-badge" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                    {% endif %}
+
+                    <!-- Product Image -->
+               <a href="{{ url_for('product_details', product_id=product.id) }}">
+    <img class="card-img-top custom-card-img"
+         src="{{ product.thumbnail if product.thumbnail else (product.images[0] if product.images else url_for('static', filename='default_image_url')) }}"
+         alt="{{ product.name }}" />
+</a>
+
+
+                    <!-- Product Details -->
+                    <div class="card-body d-flex flex-column custom-card-body">
+                        <div class="text-center flex-grow-1">
+                            <!-- Product Title -->
+                            <h5 class="fw-bolder custom-product-title">{{ product.name }}</h5>
+
+                            <!-- Product Category -->
+                            <p class="text-muted small custom-product-category">{{ product.category.name if product.category else 'N/A' }}</p>
+
+                            <!-- Rating and Stock Status -->
+                            <p class="small mb-1 custom-rating-stock">
+                                Rating: ⭐{{ product.rating if product.rating else 'N/A' }} |
+                                <span class="text-muted custom-availability-status">{{ 'In Stock' if product.stock > 0 else 'Out of Stock' }}</span>
+                            </p>
+
+                            <!-- Product Price with Discount -->
+                            {% if product.discountPercentage and product.discountPercentage > 0 %}
+                            <span class="text-muted text-decoration-line-through custom-original-price">${{ product.price }}</span>
+                            <span class="text-success custom-sale-price">
+                                ${{ (product.price * (1 - product.discountPercentage / 100)) | round(2) }}
+                            </span>
+                            {% else %}
+                            <span class="custom-price">${{ product.price }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Footer with View Options Button -->
+<form method="post" action="{{ url_for('add_to_cart', product_id=product.id) }}">
+  <div class="product-buttons-container d-flex justify-content-between align-items-center">
+
+
+    <!-- Add to Cart Button -->
+      {% if logged_in %}
+        <input type="number" id="luantity_{{ product.id }}" name="quantity" class="custom-view" value="1" min="1"
+           style="width: 40px; height: 30px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px;">
+    <button type="submit" class="btn custom-add-to-cart-button">
+      <i class="bi bi-cart-fill me-2"></i> +Add
+    </button>
+
+
+      <!-- Like Product Button (Heart Icon) -->
+      <a class="btn custom-like-button" href="">
+        <i class="bi bi-heart-fill me-2"></i> +
+      </a>
+    {% else %}
+
+      <!-- Like Product Button (Lock Icon when not logged in) -->
+      <a class="btn custom-like-button" href="{{ url_for('login') }}">
+        <i class="bi bi-lock-fill me-2"></i> Login to Buy
+      </a>
+    {% endif %}
+  </div>
+</form>
+
+                </div>
+            </div>
+            {%endif%}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!--    Best Selling items-->
+<section id="best_selling_products" class="py-5 custom-product-section" style="background-color:#1f4d4d;">
+    <div class="container px-4 px-lg-5 mt-5">
+        <!-- Best Selling Items Label -->
+        <h2 class="section-title" style="color:white;">Best Selling Products</h2>
+
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            {% for product in products %}
+                {% if product.sales_count>10 %}
+            <div class="col mb-5" data-aos="fade-up"> <!-- AOS fade effect -->
+                <div class="card h-100 custom-card">
+                    <!-- Display sale badge if discount is available -->
+                    {% if product.discountPercentage and product.discountPercentage > 0 %}
+                    <div class="badge bg-danger text-white position-absolute custom-sale-badge" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                    {% endif %}
+
+                    <!-- Product Image -->
+                    <a href="{{ url_for('product_details', product_id=product.id) }}">
+                        <img class="card-img-top custom-card-img"
+                             src="{{ product.thumbnail if product.thumbnail else (product.images[0] if product.images else url_for('static', filename='default_image_url')) }}"
+                             alt="{{ product.name }}" />
+                    </a>
+
+                    <!-- Product Details -->
+                    <div class="card-body d-flex flex-column custom-card-body">
+                        <div class="text-center flex-grow-1">
+                            <!-- Product Title -->
+                            <h5 class="fw-bolder custom-product-title">{{ product.name }}</h5>
+
+                            <!-- Product Category -->
+                            <p class="text-muted small custom-product-category">{{ product.category.name if product.category else 'N/A' }}</p>
+
+                            <!-- Rating and Stock Status -->
+                            <p class="small mb-1 custom-rating-stock">
+                                Rating: ⭐{{ product.rating if product.rating else 'N/A' }} |
+                                <span class="text-muted custom-availability-status">{{ 'In Stock' if product.stock > 0 else 'Out of Stock' }}</span>
+                            </p>
+
+                            <!-- Product Price with Discount -->
+                            {% if product.discountPercentage and product.discountPercentage > 0 %}
+                            <span class="text-muted text-decoration-line-through custom-original-price">${{ product.price }}</span>
+                            <span class="text-success custom-sale-price">
+                                ${{ (product.price * (1 - product.discountPercentage / 100)) | round(2) }}
+                            </span>
+                            {% else %}
+                            <span class="custom-price">${{ product.price }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Footer with View Options Button -->
+                    <form method="post" action="{{ url_for('add_to_cart', product_id=product.id) }}">
+                        <div class="product-buttons-container d-flex justify-content-between align-items-center">
+                            <!-- Add to Cart Button -->
+                            {% if logged_in %}
+                                <input type="number" id="quantity_{{ product.id }}" name="quantity" class="custom-view" value="1" min="1"
+                                       style="width: 40px; height: 30px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px;">
+                                <button type="submit" class="btn custom-add-to-cart-button">
+                                    <i class="bi bi-cart-fill me-2"></i> +Add
+                                </button>
+
+                                <!-- Like Product Button (Heart Icon) -->
+                                <a class="btn custom-like-button" href="">
+                                    <i class="bi bi-heart-fill me-2"></i> +
+                                </a>
+                            {% else %}
+
+                                <!-- Like Product Button (Lock Icon when not logged in) -->
+                                <a class="btn custom-like-button" href="{{ url_for('login') }}">
+                                    <i class="bi bi-lock-fill me-2"></i> Login to Buy
+                                </a>
+                            {% endif %}
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="about" class="about section">
+  <!-- Section Title -->
+  <div class="container section-title" data-aos="fade-up" data-aos-duration="600">
+    <a href="{{url_for('about')}}" class="section-link">
+      <h2>About Gizmo</h2>
+    </a>
+    <p>Learn about our mission and values that drive our project.</p>
+  </div><!-- End Section Title -->
+
+  <div class="container">
+    <div class="row g-4 g-lg-5">
+      <div class="col-md-12 col-lg-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
+        <!-- Mission -->
+        <h3><i class="fas fa-bullseye"></i> Our Mission</h3>
+        <p>Our mission is to create an innovative solution that enhances the quality of life for users by providing seamless access to resources and information. We strive to empower individuals and organizations through our project, fostering a community where knowledge and support are readily available.</p>
+
+        <h3><i class="fas fa-heart"></i> Our Values</h3>
+        <ul>
+          <li><i class="fas fa-shield-alt"></i> <strong>Integrity:</strong> We uphold the highest ethical standards in our work.</li>
+          <li><i class="fas fa-users"></i> <strong>Collaboration:</strong> We believe in the power of teamwork and open communication.</li>
+          <li><i class="fas fa-lightbulb"></i> <strong>Innovation:</strong> We embrace creativity and strive for continuous improvement.</li>
+          <li><i class="fas fa-handshake"></i> <strong>Inclusivity:</strong> We are committed to creating a welcoming environment for everyone.</li>
+        </ul>
+
+        <!-- Unique Features -->
+        <h3><i class="fas fa-star"></i> Why Choose Gizmo?</h3>
+        <ul class="list-unstyled">
+          <li><i class="fas fa-tags"></i> <strong>Wide Range of Products:</strong> From gadgets to accessories, Gizmo offers a diverse selection tailored to tech enthusiasts.</li>
+          <li><i class="fas fa-shipping-fast"></i> <strong>Fast and Reliable Shipping:</strong> Experience timely delivery with tracking options to keep you informed every step of the way.</li>
+          <li><i class="fas fa-lock"></i> <strong>Secure Payments:</strong> We prioritize your security with trusted payment gateways and encrypted transactions.</li>
+          <li><i class="fas fa-star-half-alt"></i> <strong>Customer Satisfaction:</strong> Our support team is here to ensure you have a positive shopping experience.</li>
+        </ul>
+      </div>
+
+      <div class="col-md-12 col-lg-6 d-flex justify-content-center align-items-center" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="400">
+        <img src="static/img/view.svg" class="img-fluid" alt="About Gizmo" style="max-width: 80%; height: auto;">
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!--contact section-->
+<section id="contact" class="contact section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up" data-aos-delay="300" data-aos-duration="500">
+        <h2>Contact Us</h2>
+        <p>We’re here to help! Reach out to us for any inquiries, feedback, or assistance. Your satisfaction is our priority.</p>
+    </div><!-- End Section Title -->
+
+    <div class="container" data-aos="fade-up" data-aos-delay="600" data-aos-duration="500">
+        <div class="row gy-5 gx-lg-5">
+
+            <div class="col-lg-4">
+                <div class="info" data-aos="fade-up" data-aos-delay="700" data-aos-duration="500">
+                    <h3>Get in Touch</h3>
+                    <p>We’d love to hear from you! Whether you have questions or need assistance, feel free to reach out to us.</p>
+
+                    <div class="info-item d-flex">
+                        <i class="bi bi-geo-alt flex-shrink-0"></i>
+                        <div>
+                            <h4>Location:</h4>
+                            <p>Toronto, ON, Canada</p>
+                        </div>
+                    </div><!-- End Info Item -->
+
+
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <!-- Flash Messages -->
+                <div class="flash-container">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="alert alert-info">Have any questions? Feel free to reach out! We're here to help and look forward to hearing from you!</div>
+                        {% endif %}
+                    {% endwith %}
+                </div>
+
+                <!-- Contact Form -->
+                <form method="POST" action="{{ url_for('submit') }}" role="form" class="custom-form" data-aos="fade-up" data-aos-delay="800" data-aos-duration="500">
+                    {{ form.hidden_tag() }}  <!-- CSRF token -->
+
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            {{ form.name(class="form-control", id="name", placeholder="Your Name", required=true) }}
+                        </div>
+                        <div class="col-md-6 form-group mt-3 mt-md-0">
+                            {{ form.email(class="form-control", id="email", placeholder="Your Email", required=true) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        {{ form.subject(class="form-control", id="subject", placeholder="Subject", required=true) }}
+                    </div>
+
+                    <div class="form-group mt-3">
+                        {{ form.message(class="form-control", placeholder="Message", required=true) }}
+                    </div>
+
+                    <div class="text-center">
+                        {{ form.submit(class="btn btn-theme") }} <!-- Updated with custom button class -->
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</section>
+<!-- /Contact Section -->
+
+
+
+
+
+{%include 'footer.html'%}
