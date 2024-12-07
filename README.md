@@ -27,3 +27,20 @@ The secure checkout system ensures safe and reliable online transactions.
 
 Conclusion
 This e-commerce website serves as a solid foundation for building scalable and interactive web applications with Flask. It showcases key web development skills, including user authentication, database integration, and responsive design. The project can be expanded with additional features such as payment gateway integration and enhanced security measures.
+
+Screenshots
+
+![image](https://github.com/user-attachments/assets/adc5cbbf-d855-44bf-83be-dd2c5d5e3e6c)
+
+![image](https://github.com/user-attachments/assets/2bc21f86-f461-423e-aaec-ac94b9239362)
+
+![image](https://github.com/user-attachments/assets/07bc3c6b-bc55-40b7-bed0-dbacf726a66c)
+
+![image](https://github.com/user-attachments/assets/40a98c70-318d-4a94-8f64-cffb5785d639)
+
+![image](https://github.com/user-attachments/assets/ddc14546-44b0-41b0-b5d0-79ea1e794e8e)
+
+
+
+
+
